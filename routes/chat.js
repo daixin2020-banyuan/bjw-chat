@@ -7,5 +7,7 @@ module.exports =  function(router){
 
   router.get('/chat',controller.chat)
 
+  router.post('/chatContent',controller.chatContent)
+
 
 }

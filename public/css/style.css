@@ -10,3 +10,9 @@ a {
 input{
   outline: none;
 }
+
+.clearFix::after{
+  content: '';
+  display: block;
+  clear:both;
+}
