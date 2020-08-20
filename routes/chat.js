@@ -9,5 +9,7 @@ module.exports =  function(router){
 
   router.post('/chatContent',controller.chatContent)
 
+  router.get('/getContent',controller.refreshContent)
+
 
 }

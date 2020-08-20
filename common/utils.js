@@ -22,7 +22,7 @@ function formatTime(time){
     return moment(time).locale('zh_cn').format('YYYYMMMMDo  aHH:MM:SS')
   }
   
-module.exports={
+module.exports = {
     getRandomAvatar,
     formatTime
 }

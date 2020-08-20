@@ -1,5 +1,5 @@
 const services = require('../services/chat')
-const {getRandomAvatar} =require('../common/utils')
+const { getRandomAvatar } =require('../common/utils') 
 
 async function login(ctx, next) {
 
@@ -8,14 +8,13 @@ async function login(ctx, next) {
 
 
 async function chatLogin(ctx,next){
-    const { nickname } = ctx.request.body
-    
+    const { nickName } = ctx.request.body
     const avatar = getRandomAvatar()
 
-    ctx.cookies.set('user',JSON.stringify({nickname,avatar}),
+    ctx.cookies.set('user',JSON.stringify({nickName,avatar}),
         {maxAge:24*60*60*1000}
     );
-    if(nickname){
+    if(nickName){
         ctx.response.body ={status: 'success'}        
     }
 
@@ -27,14 +26,13 @@ async function chat(ctx,next){
 
    if(user){
        user = JSON.parse(user)
-       if(user.nickname){
+       if(user.nickName){
         const contents =await services.getContent()
 
         ctx.state={
-            nickName:user.nickname,
+            nickName:user.nickName,
             contents,
         }
-
         await ctx.render('chat',ctx.state)
        }else{
         ctx.redirect('/')
@@ -57,14 +55,24 @@ async function chatContent(ctx,next){
 
     if(user){
         const{ nickName ,avatar} = JSON.parse(user)
-
         await services.addContent({nickName,avatar,content})
-
-        data.status = 'success'
+        const contents =await services.getContent()
+        data={
+            contents,
+            status : 'success'
+        }
     }
-
-
     ctx.response.body = data
+
+}
+
+async function refreshContent(ctx,next){
+
+    const contents =await services.getContent()
+    ctx.response.body = {
+        status:'success',
+        contents
+    }
 
 }
 
@@ -76,4 +84,5 @@ module.exports={
     chatLogin,
     chat,
     chatContent,
+    refreshContent
 }

@@ -10,7 +10,7 @@ const chatsSchema = new Schema({
 
 const chatsModel = mongoose.model('chats', chatsSchema)
 
-console.log(chatsModel)
+// console.log(chatsModel)
 module.exports = {
   chatsModel
 }

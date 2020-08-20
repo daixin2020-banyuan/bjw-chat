@@ -2,14 +2,14 @@ let inputEle = document.getElementsByClassName('login-input')[0];
 let btnEle = document.getElementsByClassName('login-button')[0];
 
 btnEle.onclick = function(){
-    let nickname = inputEle.value;
+    let nickName = inputEle.value;
 
-    if(nickname){
+    if(nickName){
         $.ajax({
             type:'post',
             url:'http://localhost:4000/chat/login',
             data:{
-                nickname
+                nickName
             },
             success:(result)=>{
 
