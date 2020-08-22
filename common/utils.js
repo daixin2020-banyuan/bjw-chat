@@ -19,8 +19,8 @@ function getRandomAvatar(){
 
 function formatTime(time){
 
-    return moment(time).locale('zh_cn').format('YYYYMMMMDo  aHH:MM:SS')
-  }
+  return moment(time).locale('zh_cn').format('YYYYMMMMDo  aHH:MM:SS')
+}
   
 module.exports = {
     getRandomAvatar,

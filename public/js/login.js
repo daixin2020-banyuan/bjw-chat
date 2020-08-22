@@ -19,7 +19,6 @@ btnEle.onclick = function(){
 
             },
             error:()=>{
-
             }
         })
     }

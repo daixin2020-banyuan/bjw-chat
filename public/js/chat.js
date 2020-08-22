@@ -1,14 +1,16 @@
-
+// const moment = require('moment')
+// const _ = require('lodash');
 let inputEle = document.getElementsByClassName('chat-input')[0];
 let contentEle = document.getElementsByClassName('chat-detail-right')[0];
-
+let ele = document.getElementsByClassName('chat-content')[0];
+let warningEle = document.getElementsByClassName('warning')[0];
 let timer;
-
+let originData;
 stopTimer();
-
 longPolling();
-
 scrollToBottom();
+getOriginData();
+
 
 inputEle.onkeydown = function(e){
     var key = e.which
@@ -27,21 +29,42 @@ inputEle.onkeydown = function(e){
                         render(result.contents);
                         inputEle.value='';
                         scrollToBottom()
+                        originData = result.contents
+                        console.log('originData 回车时===>',originData)
                     }
-                },
-                error:()=>{
                 }
             })
         }
     }
+
 }
 
-    function scrollToBottom(){
-        let ele = document.getElementsByClassName('chat-content')[0];
-        ele.scrollTop=ele.scrollHeight
+// console.log('originData++===>',originData)
+console.log(1)
 
+//置底部
+    function scrollToBottom(){
+        ele.scrollTop=ele.scrollHeight
     }
 
+    
+    function getOriginData(){
+
+        $.ajax({
+          type:'get',
+          url:'http://localhost:4000/getContent',
+          data:{},
+          success:(result)=>{
+            originData = result.contents
+
+            console.log(originData);
+          }
+        })
+        
+    }
+
+
+    //长轮询
     function longPolling(){
         timer= setInterval(() => {
             $.ajax({
@@ -50,17 +73,39 @@ inputEle.onkeydown = function(e){
                 data:{},
                 success:(result)=>{
                     render(result.contents)
+                    // console.log('originData 轮询时===>',originData)
+
+                    if(originData){
+                        result.contents.filter((item)=>{
+                            let flag  = moment(originData[originData.length-1].createdAt).isBefore(moment(item.createdAt))
+                            if(flag){
+                                warningEle.style.display='block'
+                            }
+                        })
+                    }
                 }
             })          
         }, 2000);
     }
-    
+
+    //关闭消息提示窗口
+    warningEle.onclick = function(){
+        scrollToBottom()
+        warningEle.style.display='none'
+
+        getOriginData()
+    }
+
+
+    //停止定时器
     function stopTimer(){
         if(timer){
             clearInterval(timer)
         }
     }
 
+
+    //渲染聊天部分内容
     function render(contents){
         let html = '';
         contents.forEach((item)=>{
@@ -75,7 +120,8 @@ inputEle.onkeydown = function(e){
                 `<div class='chat-time'>${moment(item.createdAt).locale('zh_cn').format('YYYYMMMMDo  aHH:MM:SS')}</div>`+   
                 `</div>`
         })
-                $('.chat-content').html('');
-                $('.chat-content').html(html)
+
+        $('.chat-content').html('');
+        $('.chat-content').html(html);
     }
 

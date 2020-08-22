@@ -86,3 +86,14 @@
     left:20px;
     top:8px;
 }
+.warning{
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    height: 100px;
+    width: 100px;
+    background-color: tomato;
+    font-size: 12px;
+    display: none;
+
+}

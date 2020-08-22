@@ -10,6 +10,9 @@
         </div>
 
         {# 聊天主体 #}
+        <div class='warning'>
+        有新消息
+        </div>
         <div class='chat-content'>
             {% for item in contents %}
                 <div class='chat-content-container'>
@@ -51,7 +54,6 @@
 {% endblock %}
 
 {% block style %}
-    
     <link rel='stylesheet', href='/css/chat.css'>
 {% endblock %}
     
